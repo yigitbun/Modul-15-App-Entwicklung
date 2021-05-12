@@ -1,6 +1,6 @@
 {
-  "name": "To-Do App Demo",
-  "short_name": "To-Do App",
+  "name": "ToDo App",
+  "short_name": "ToDo",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#ffffff",

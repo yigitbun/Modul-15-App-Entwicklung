@@ -1,94 +1,96 @@
+let todoItems = [];
 
-function initList() {
-  // Create a "close" button and append it to each list item
-  var myNodelist = document.getElementsByTagName("LI");
-  var i;
-  for (i = 0; i < myNodelist.length; i++) {
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    myNodelist[i].appendChild(span);
+function renderTodo(todo) {
+  localStorage.setItem('todoItems', JSON.stringify(todoItems));
+
+  const list = document.querySelector('.js-todo-list');
+  const item = document.querySelector(`[data-key='${todo.id}']`);
+  
+  if (todo.deleted) {
+    item.remove();
+    if (todoItems.length === 0) list.innerHTML = '';
+    return
   }
 
-  // Click on a close button to hide the current list item
-  var close = document.getElementsByClassName("close");
-  var i;
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    }
-  }
+  const isChecked = todo.checked ? 'done': '';
+  const node = document.createElement("li");
+  node.setAttribute('class', `todo-item ${isChecked}`);
+  node.setAttribute('data-key', todo.id);
+  node.innerHTML = `
+    <input id="${todo.id}" type="checkbox"/>
+    <label for="${todo.id}" class="tick js-tick"></label>
+    <span>${todo.text}</span>
+    <button class="delete-todo js-delete-todo">
+    <svg><use href="#delete-icon"></use></svg>
+    </button>
+  `;
 
-  // Add a "checked" symbol when clicking on a list item
-  var list = document.querySelector('ul');
-  list.addEventListener('click', function(ev) {
-    if (ev.target.tagName === 'LI') {
-      ev.target.classList.toggle('checked');
-    }
-  }, false);
-
-  // Create a new list item when clicking on the "Add" button
-  function newElement() {
-    var li = document.createElement("li");
-    var inputValue = document.getElementById("myInput").value;
-    var t = document.createElement('span');
-    t.classList.add('value');
-    t.innerHTML = inputValue;
-    li.appendChild(t);
-    if (inputValue === '') {
-      alert("You must write something!");
-    } else {
-      document.getElementById("myUL").appendChild(li);
-    }
-    document.getElementById("myInput").value = "";
-
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    li.appendChild(span);
-
-    for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
-      }
-    }
+  if (item) {
+    list.replaceChild(node, item);
+  } else {
+    list.append(node);
   }
 }
 
+function addTodo(text) {
+  const todo = {
+    text,
+    checked: false,
+    id: Date.now(),
+  };
 
-function save() {
-  let listElements = document.querySelectorAll('#myUL li');
-  let data = [];
+  todoItems.push(todo);
+  renderTodo(todo);
+}
 
-  for (let i = 0; i < listElements.length; i++) {
-    let element = listElements[i].querySelector('.value');
-    data.push({
-      content: element.innerText,
-      checked: listElements[i].classList.contains('checked')
-    });
+function toggleDone(key) {
+  const index = todoItems.findIndex(item => item.id === Number(key));
+  todoItems[index].checked = !todoItems[index].checked;
+  renderTodo(todoItems[index]);
+}
+
+function deleteTodo(key) {
+  const index = todoItems.findIndex(item => item.id === Number(key));
+  const todo = {
+    deleted: true,
+    ...todoItems[index]
+  };
+  todoItems = todoItems.filter(item => item.id !== Number(key));
+  renderTodo(todo);
+}
+
+const form = document.querySelector('.js-form');
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  const input = document.querySelector('.js-todo-input');
+
+  const text = input.value.trim();
+  if (text !== '') {
+    addTodo(text);
+    input.value = '';
+    input.focus();
   }
-
-  localStorage.setItem('data', JSON.stringify(data));
-  console.log('save data', data);
-}
-
-function load() {
-  let dataString = localStorage.getItem('data');
-  data = JSON.parse(dataString);
-  console.log('loaded data', data);
-}
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  initList();
-
-  // save und load müssen noch an die richtigen Stellen gesetzt werden. 
-  // Jetzt nutzen wir es gerade noch zum Testen, ob die Daten richtig geladen und gespeichet werden.
-  load();
-  save();
 });
 
+const list = document.querySelector('.js-todo-list');
+list.addEventListener('click', event => {
+  if (event.target.classList.contains('js-tick')) {
+    const itemKey = event.target.parentElement.dataset.key;
+    toggleDone(itemKey);
+  }
+  
+  if (event.target.classList.contains('js-delete-todo')) {
+    const itemKey = event.target.parentElement.dataset.key;
+    deleteTodo(itemKey);
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const ref = localStorage.getItem('todoItems');
+  if (ref) {
+    todoItems = JSON.parse(ref);
+    todoItems.forEach(t => {
+      renderTodo(t);
+    });
+  }
+});

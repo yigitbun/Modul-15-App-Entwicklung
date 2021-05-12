@@ -1,12 +1,13 @@
 
 console.log('Script loaded!')
-var cacheStorageKey = 'minimal-pwa-3'
+var cacheStorageKey = 'minimal-pwa-1'
 
 var cacheList = [
   '/',
-  "index.php",
-  "style.css",
-  "e.png"
+  "index.html",
+  "main.css",
+  "main.js",
+  "icon.png",
 ]
 
 self.addEventListener('install', function(e) {

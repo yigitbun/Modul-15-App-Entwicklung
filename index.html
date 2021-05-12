@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>To-Do App Demo</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="icon" href="/icon.png" type="image/png" />
+  </head>
+
+  <body>
+    <div class="header">
+      <h2>To Do List</h2>
+    </div>
+    
+    <ul id="myUL">
+      <li><span class="value">Hit the gym</span></li>
+      <li class="checked"><span class="value">Pay bills</span></li>
+      <li><span class="value">Meet George</span></li>
+      <li><span class="value">Buy eggs</span></li>
+      <li><span class="value">Read a book</span></li>
+      <li><span class="value">Organize office</span></li>
+    </ul>
+
+    <div id="myDIV" class="header sticky">
+      <input type="text" id="myInput" placeholder="Title…">
+      <span onclick="newElement()" class="addBtn">Add</span>
+    </div>
+
+    <script type="text/javascript">
+      if (navigator.serviceWorker != null) {
+        navigator.serviceWorker.register('sw.js')
+        .then(function(registration) {
+          console.log('Registered events at scope: ', registration.scope);
+        });
+      }
+    </script>
+
+    <script src="main.js"></script>
+  </body>
+
+</html>

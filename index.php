@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ToDo App</title>
     <link rel="stylesheet" href="main.css" />
+    <link rel="manifest" href="manifest.json" />
   </head>
   <body>
     <main>
@@ -86,5 +87,21 @@
       </defs>
     </svg>
     <script src="main.js"></script>
+    <script type="text/javascript">
+      if (navigator.serviceWorker != null) {
+        navigator.serviceWorker.register("sw.js").then(function (registration) {
+          console.log("Registered events at scope: ", registration.scope);
+        });
+      }
+
+      fetch("./data.json");
+
+      var statusEl = document.querySelector("#network-status");
+      if (!navigator.onLine) {
+        statusEl.classList = ["is-offline"];
+        statusEl.innerText = "Offline";
+      }
+    </script>
+    <script src="script.js"></script>
   </body>
 </html>

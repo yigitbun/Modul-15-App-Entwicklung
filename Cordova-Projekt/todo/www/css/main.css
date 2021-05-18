@@ -113,6 +113,7 @@ input[type="text"] {
   padding: 10px;
   border-radius: 4px;
   border: 3px solid #333;
+  font-size: 1rem;
 }
 
 /* Add this below all the other styles */

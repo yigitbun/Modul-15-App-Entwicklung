@@ -29,23 +29,43 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
         <meta name="color-scheme" content="light dark">
         <link rel="stylesheet" href="css/index.css">
-        <title>Hello World</title>
+        <title>QR-Code Demo</title>
     </head>
     <body>
+
         <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+
+            <!-- <button class="cancel-scan">Abbrechen</button>
+
+            <div class="result">
+                <h1 class="title">Scannen</h1>
+                <button class="cancel-scan">Abbrechen</button>
+            </div>
+             -->
+
+             <div class="container generator">
+                <h1 class="title">QR-Code generieren</h1>
+                <input class="input" id="text" type="text" value="https://cordova.apache.org/" />
+                <div class="qr-code-wrapper" id="qrcode"></div>
+            </div>
+
+            <hr>
+
+            <div class="container scanner">
+                <h1>QR-Code scannen</h1>
+                <pre id="output">Scanned content…</pre>
+                <button id="scan" class="scan">Scannen</button>
             </div>
         </div>
+
         <script src="cordova.js"></script>
+        <script src="js/qrcode.min.js"></script>
         <script src="js/index.js"></script>
     </body>
 </html>

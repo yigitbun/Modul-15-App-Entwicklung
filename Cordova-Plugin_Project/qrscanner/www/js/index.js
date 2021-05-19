@@ -63,7 +63,9 @@ function onDeviceReady() {
         } else {
             // The scan completed, display the contents of the QR code:
             console.log(text);
-            document.getElementById('output').textContent = text.result;
+            document.getElementById('output').textContent = text;
+            document.getElementById('text').value = text;
+            makeCode();
         }
     }
 }
@@ -71,19 +73,10 @@ function onDeviceReady() {
 
 
 document.addEventListener('DOMContentLoaded', init);
+var qrcode = undefined;
 
 function init() {
-    var qrcode = new QRCode("qrcode");
-    
-    function makeCode () {    
-        var elText = document.getElementById("text");
-        
-        if (!elText.value) {
-            qrcode.makeCode('');
-            return;
-        }
-        qrcode.makeCode(elText.value);
-    }
+    qrcode = new QRCode("qrcode");
     
     makeCode();
 
@@ -91,4 +84,14 @@ function init() {
     input.addEventListener('input', function(event) {
         makeCode();
     });
+}
+
+function makeCode () {    
+    var elText = document.getElementById("text");
+    
+    if (!elText.value) {
+        qrcode.makeCode('');
+        return;
+    }
+    qrcode.makeCode(elText.value);
 }
